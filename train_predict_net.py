@@ -18,10 +18,12 @@ class IVAL_Dataset(Dataset):
     def __init__(self):
         self.file_path = '.\\dataset'
         self.image_list = os.listdir(self.file_path)
-        self.transforms = transforms.Compose([
-                                            transforms.ToTensor(),
-                                            transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
-                                            ])
+        # self.transforms = transforms.Compose([
+        #                                     transforms.ToTensor(),
+        #                                     transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
+        #                                     ])
+
+        self.transforms = transforms.ToTensor()
 
     def __getitem__(self, index):
         data_path = os.path.join(self.file_path, self.image_list[index])
