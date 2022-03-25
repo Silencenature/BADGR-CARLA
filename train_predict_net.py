@@ -14,10 +14,7 @@ import os
 from torch.utils.data import Dataset, DataLoader
 import config
 
-norm_tensor = transforms.Compose([
-                                transforms.ToTensor(),
-                                transforms.Normalize(mean = (0.5, 0.5, 0.5), std = (0.5, 0.5, 0.5))
-                                ])
+
 
 class IVAL_Dataset(Dataset):
     def __init__(self):
@@ -33,13 +30,12 @@ class IVAL_Dataset(Dataset):
         f_read = open(data_path, 'rb')
         load_pkl = pickle.load(f_read)
         f_read.close()
-        # image_tensor = self.transforms(load_pkl['image'])
-        image = load_pkl['image']
+        image_tensor = self.transforms(load_pkl['image'])
         vel = load_pkl['vel']
         action_series = load_pkl['action_series']
         label = load_pkl['label']
         
-        return image, vel, action_series, label
+        return image_tensor, vel, action_series, label
 
     def __len__(self):
         return len(self.image_list)
@@ -89,8 +85,7 @@ def main():
         epoch_loss = []
         print('\n******** epoch [%s / %s] ********' % (epoch, max_epochs))
         for step,(batch_image_tensor, batch_vel, batch_action_series, batch_label) in enumerate(IVAL_dataloader):
-            # batch_image_tensor = batch_image_tensor.float().to(device)
-            batch_image_tensor = norm_tensor(batch_image_tensor).float().to(device)
+            batch_image_tensor = batch_image_tensor.float().to(device)
             batch_vel = batch_vel.float().to(device)
             batch_action_series = batch_action_series.float().to(device)
             batch_label = batch_label.float().to(device)
